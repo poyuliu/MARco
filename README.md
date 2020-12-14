@@ -34,6 +34,7 @@ install package from github:
 library(devtools)
 install_github("poyuliu/MARco")
 ``` 
+sourcing MARco R library 
 ```
 library(MARco)
 ```
