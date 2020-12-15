@@ -9,5 +9,5 @@ Description: MARco is an R code and function set for microbiome analysis with le
 License: none
 Encoding: UTF-8
 LazyData: true
-Imports: vegan, fossil, vioplot, igraph, SpiecEasi, DESeq2, pheatmap, MASS, gage, cluster, clusterSim
+Imports: vegan, fossil, vioplot, igraph, SpiecEasi, DESeq2, pheatmap, MASS, gage, cluster, clusterSim, randomForest, plyr, rfUtilities, caret, ROCR, pROC, doMC
 RoxygenNote: 7.1.1
