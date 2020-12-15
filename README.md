@@ -18,7 +18,8 @@ Liu, P.-Y. _MARco: Microbiome Analysis RcodeDB_ (2020). Available at: <https://g
 `pheatmap` for plot heatmap  
 `MASS` for LDA (linear discriminant analysis) effect size (LEfSe)  
 `gage` for GAGE (Generally Applicable Gene-set Enrichment) analysis  
-`cluster` and `clusterSim` for Enterotyping
+`cluster` and `clusterSim` for Enterotyping  
+`randomForest`, `plyr`, `rfUtilities`, `caret`, `ROCR` and `pROC` for Random Forest analysis
 
 ### Available codes & how to use:
 ~~source("http://www.lifescipy.net/RcodeDB/FN_microbiome.R") # Microbiome analysis function set~~
