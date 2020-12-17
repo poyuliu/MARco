@@ -5,7 +5,7 @@ if(length(new.packages)) {
     install.packages("BiocManager")
   BiocManager::install("gage")
 }
-rm(list = c("list.of.packages","new.packages"))
+#rm(list = c("list.of.packages","new.packages"))
 
 #rm(list=ls())
 #picrust2 <- read.delim("KEGG/pred_metagenome_unstrat_descrip.tsv",row.names = 1)
