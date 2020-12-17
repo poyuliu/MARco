@@ -1,11 +1,4 @@
-list.of.packages <- c("igraph")
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
-#required packages
 require(SpiecEasi)
-require(igraph)
-
 
 ###### FUNCTION 01 #####
 # > prevalence(data,prevalence)
@@ -23,7 +16,7 @@ prevalence <- function(data,prevalence=0.1){
 corr <- function(data,cutoff=0,method="sparcc"){
   data <- data.frame(t(data))
   if(method=="sparcc"){
-    w <- sparcc(data)[[2]]
+    w <- SpiecEasi::sparcc(data)[[2]]
     colnames(w) <- rownames(w) <- colnames(data)
   } else  w <- cor(data,method = method)
   diag(w) <- 0
@@ -46,8 +39,8 @@ boot2matrix <- function(bootcors,otutable){
 #network matrix
 network.pipeline <- function(otu,prevalence=0.1,alpha=0.05,bootstrap=99,cpu=1){
   net.o <- prevalence(data = otu,prevalence = prevalence)
-  ww <- sparccboot(t(net.o),R=bootstrap,ncpus = cpu) # R: bootsrtapping numbers
-  w.boot <- pval.sparccboot(ww)
+  ww <- SpiecEasi::sparccboot(t(net.o),R=bootstrap,ncpus = cpu) # R: bootsrtapping numbers
+  w.boot <- SpiecEasi::pval.sparccboot(ww)
   w.mb <- w.boot$cors
   p.mb <- w.boot$pvals
   w.mb <- boot2matrix(w.mb,net.o)
@@ -62,6 +55,7 @@ network.pipeline <- function(otu,prevalence=0.1,alpha=0.05,bootstrap=99,cpu=1){
 # > make_network(w,data,cutoff,size,degree,clustering)
 # make network using igraph package
 make_network <- function(w,data,cutoff=0.5,both=TRUE,size=1,degree=1,clustering=TRUE){
+  require(igraph)
   #g.x <- graph.adjacency(w, weighted=TRUE,mode="lower")
   if(both==TRUE){
     g.x <- graph.adjacency(abs(w), weighted=TRUE,mode="lower")
@@ -111,6 +105,7 @@ make_network <- function(w,data,cutoff=0.5,both=TRUE,size=1,degree=1,clustering=
 ##### FUNCTION 03.1 #####
 # > plot_network(graph_from_make_network,positive=TRUE,negative=TRUE,pos.col="#0652DD55",neg.col="#EA202755")
 plot_network <- function(graph_from_make_network,positive=TRUE,negative=TRUE,pos.col="#0652DD55",neg.col="#EA202755",curve=0,frame.color="#FAFAFA"){
+  require(igraph)
   if(positive==TRUE && negative==TRUE){
     E(graph_from_make_network$graph)$color <- ifelse(E(graph_from_make_network$graph)$weight>0,pos.col,neg.col)
   } else if(positive==TRUE && negative==FALSE){
