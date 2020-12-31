@@ -35,6 +35,10 @@ otu_trans_scale <- function(otu_table_rare_removed){
 #Running Model
 #classification or regression
 runRF <- function(otu_table_scaled,Y,metadata,model=c("classification","regression"),ntree=501,cores=4,plotALL=FALSE,plotTOP10=FALSE){
+  require("randomForest")
+  require("plyr") # for the "arrange" function
+  require("rfUtilities") # to test model significance
+  require("caret") # to get leave-one-out cross-validation accuracies and also contains the nearZeroVar function 
   try(if(model!="classification" & model!="regression") stop("Must select an RF model type: 'classification' or 'regression'!"))
   otu_table_scaled_data <- data.frame(t(otu_table_scaled))  
   attach(metadata)
@@ -95,6 +99,8 @@ runRF <- function(otu_table_scaled,Y,metadata,model=c("classification","regressi
 
 
 RF2ROC <- function(RFmodel,plot=FALSE,col="#003366"){
+  require("ROCR")
+  require("pROC")
   RFmodel <- RFmodel$RFmodel
   Importance <- importance(RFmodel,type = 2)
   predictions=as.vector(RFmodel$votes[,2])
@@ -125,6 +131,8 @@ RF2ROC <- function(RFmodel,plot=FALSE,col="#003366"){
 
 # validation cohort cross validation
 VCCV <- function(RFmodel,newdata,newdataGroup,plot=FALSE,cvcol="#bf0808",RFROC,mdcol="#003366"){
+  require("ROCR")
+  require("pROC")
   RFmodel <- RFmodel$RFmodel
   
   mapID <- match(rownames(RFmodel$importance),rownames(newdata))
