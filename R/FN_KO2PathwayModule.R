@@ -1,10 +1,10 @@
-list.of.packages <- c("gage")
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) {
-  if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-  BiocManager::install("gage")
-}
+#list.of.packages <- c("gage")
+#new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+#if(length(new.packages)) {
+#  if (!requireNamespace("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+#  BiocManager::install("gage")
+#}
 #rm(list = c("list.of.packages","new.packages"))
 
 #rm(list=ls())
@@ -171,8 +171,8 @@ FSEA <- function(Fdata,Groups,FunctionalSets="pathway",SortLv=2,Test="within",al
     gageX <- list()
     cbm <- cbind(combn(levels(Groups),2),combn(levels(Groups),2)[2:1,])
     for(k in 1:ncol(cbm)){
-      gageX[[k]] <- gage(PropData,gset=kegg.gs,ref=which(Groups==cbm[2,k]),samp=which(Groups==cbm[1,k]),rank.test = F,
-                         saaTest = gs.tTest,compare = "unpaired")
+      gageX[[k]] <- gage::gage(PropData,gset=kegg.gs,ref=which(Groups==cbm[2,k]),samp=which(Groups==cbm[1,k]),rank.test = F,
+                         saaTest = gage::gs.tTest,compare = "unpaired")
       gageX[[k]] <- as.data.frame(gageX[[k]][[1]])
       gageX[[k]] <- gageX[[k]][order(rownames(gageX[[k]])),]
     }
@@ -180,7 +180,7 @@ FSEA <- function(Fdata,Groups,FunctionalSets="pathway",SortLv=2,Test="within",al
     qvals <- data.frame(do.call(cbind,lapply(gageX,"[","q.val")))
     colnames(qvals) <- paste0("r:",t(cbm)[,1],"-","s:",t(cbm)[,2])
     qvals[is.na(qvals)] <- 1
-    qvals.sig <- qvals[which(rowSums(qvals<0.05)>=1),]
+    qvals.sig <- qvals[which(rowSums(qvals<alpha)>=1),]
     Escore.sig <- -log10(qvals.sig)
     
     ESx <- list()
@@ -193,7 +193,7 @@ FSEA <- function(Fdata,Groups,FunctionalSets="pathway",SortLv=2,Test="within",al
       par(mar=c(4.1,18.1,1.1,2.1),cex.lab=0.7,cex.axis=0.7)
       for(m in 1:length(levels(Groups))){
         barplot(t(ESx[[m]]),beside = T,horiz = T,las=1,cex.name=0.7,xlim=c(0,12),col = barcol,border = F)
-        abline(v=-log10(0.05),lty=3)
+        abline(v=-log10(alpha),lty=3)
         legend("bottomright",legend = colnames(ESx[[m]]),
                bty="n",fill=barcol,cex = 0.7)
       }
