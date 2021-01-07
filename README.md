@@ -34,6 +34,11 @@ install package from github:
 library(devtools)
 install_github("poyuliu/MARco")
 ``` 
+if fail to install rgdal package automatically
+<https://r-forge.r-project.org/R/?group_id=884>
+```
+ install.packages("rgdal", repos="http://R-Forge.R-project.org")
+```
 sourcing MARco R library 
 ```
 library(MARco)
