@@ -184,20 +184,35 @@ FSEA <- function(Fdata,Groups,FunctionalSets="pathway",SortLv=2,Test="within",al
     Escore.sig <- -log10(qvals.sig)
     
     ESx <- list()
-    for(m in 1:length(levels(Groups))){
-      ESx[[m]] <- Escore.sig[,grep(paste0("r:",levels(Groups)[m],"-"),names(Escore.sig))]
-      ESx[[m]] <- ESx[[m]][order(rowSums(ESx[[m]])),]
-    }
-    
-    if(plot==TRUE){
-      par(mar=c(4.1,18.1,1.1,2.1),cex.lab=0.7,cex.axis=0.7)
-      for(m in 1:length(levels(Groups))){
-        barplot(t(ESx[[m]]),beside = T,horiz = T,las=1,cex.name=0.7,xlim=c(0,12),col = barcol,border = F)
-        abline(v=-log10(alpha),lty=3)
-        legend("bottomright",legend = colnames(ESx[[m]]),
-               bty="n",fill=barcol,cex = 0.7)
+    if(length(levels(groups)==2)){
+      m <- 1
+      ESx[[m]] <- Escore.sig
+      
+      if(plot==TRUE){
+        par(mar=c(4.1,18.1,1.1,2.1),cex.lab=0.7,cex.axis=0.7)
+          barplot(t(ESx[[m]]),beside = T,horiz = T,las=1,cex.name=0.7,xlim=c(0,12),col = barcol,border = F)
+          abline(v=-log10(alpha),lty=3)
+          legend("bottomright",legend = colnames(ESx[[m]]),
+                 bty="n",fill=barcol,cex = 0.7)
+      }
+      
+    } else if(length(levels(groups)>2)){
+      for (m in 1:length(levels(groups))) {
+        ESx[[m]] <- Escore.sig[, grep(paste0("r:", levels(groups)[m], 
+                                             "-"), names(Escore.sig))]
+        ESx[[m]] <- ESx[[m]][order(rowSums(ESx[[m]])), ]
+      }
+      if(plot==TRUE){
+        par(mar=c(4.1,18.1,1.1,2.1),cex.lab=0.7,cex.axis=0.7)
+        for(m in 1:length(levels(Groups))){
+          barplot(t(ESx[[m]]),beside = T,horiz = T,las=1,cex.name=0.7,xlim=c(0,12),col = barcol,border = F)
+          abline(v=-log10(alpha),lty=3)
+          legend("bottomright",legend = colnames(ESx[[m]]),
+                 bty="n",fill=barcol,cex = 0.7)
+        }
       }
     }
+    
     
     return(ESx)
   }
