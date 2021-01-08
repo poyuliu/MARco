@@ -184,7 +184,7 @@ FSEA <- function(Fdata,Groups,FunctionalSets="pathway",SortLv=2,Test="within",al
     Escore.sig <- -log10(qvals.sig)
     
     ESx <- list()
-    if(length(levels(groups)==2)){
+    if(length(levels(Groups)==2)){
       m <- 1
       ESx[[m]] <- Escore.sig
       
@@ -196,9 +196,9 @@ FSEA <- function(Fdata,Groups,FunctionalSets="pathway",SortLv=2,Test="within",al
                  bty="n",fill=barcol,cex = 0.7)
       }
       
-    } else if(length(levels(groups)>2)){
-      for (m in 1:length(levels(groups))) {
-        ESx[[m]] <- Escore.sig[, grep(paste0("r:", levels(groups)[m], 
+    } else if(length(levels(Groups)>2)){
+      for (m in 1:length(levels(Groups))) {
+        ESx[[m]] <- Escore.sig[, grep(paste0("r:", levels(Groups)[m], 
                                              "-"), names(Escore.sig))]
         ESx[[m]] <- ESx[[m]][order(rowSums(ESx[[m]])), ]
       }
