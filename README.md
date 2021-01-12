@@ -35,7 +35,12 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install(c("gage","DESeq2"))
+```  
+install dependencies from GitHub  
 ```
+library(devtools)
+install_github("zdk123/SpiecEasi")
+```  
 if fail to install rgl package automatically  
 please refer to: <https://r-forge.r-project.org/R/?group_id=234>
 ```
