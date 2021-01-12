@@ -29,16 +29,24 @@ Liu, P.-Y. _MARco: Microbiome Analysis RcodeDB_ (2020). Available at: <https://g
 ~~source("http://www.lifescipy.net/RcodeDB/FN_enterotyping.R") # Enterotyping~~ 
 ~~source("http://www.lifescipy.net/RcodeDB/FN_KO2PathwayModule.R") # Reformat KEGG Orthology (KO) to pathways and modules from metagenome, metatranscriptome, or functional prediction data~~
 
-install package from github:
+install dependencies from Bioconductor  
 ```
-library(devtools)
-install_github("poyuliu/MARco")
-``` 
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("gage","DESeq2"))
+```
 if fail to install rgl package automatically  
 please refer to: <https://r-forge.r-project.org/R/?group_id=234>
 ```
  install.packages("rgl", repos="http://R-Forge.R-project.org")
 ```
+
+install package from github:
+```
+library(devtools)
+install_github("poyuliu/MARco")
+``` 
 sourcing MARco R library 
 ```
 library(MARco)
