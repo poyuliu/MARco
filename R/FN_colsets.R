@@ -1,6 +1,9 @@
 colset.d.2 <- RColorBrewer::brewer.pal(11,"RdBu")[c(10,2)]
 colset.d.4 <- c("#227093","#ffa801","#2c2c54","#b33939")
 colset.d.5 <- c("#4285F4","#FBBC05","#EA4335","#0b5e12","#2e2128")
+colset.d.5 <- c("#4285F4","#FBBC05","#EA4335","#0b5e12","#2e2128")
+colset.d.6 <- c("#003C78","#FFBE00","#46961E","#645AA0","#D25500","#474747")
+
 colset.d.12 <- c('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928')
 
 
