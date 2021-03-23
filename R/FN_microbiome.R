@@ -500,7 +500,10 @@ PCENVcorOTU <- function(data,Ord,ENV,cor.method="pearson",alpha.pc.env=0.05,corr
   select.pc.env <- apply(PCs,2,function(x) cor.test(x,ENV,method = cor.method))
   select.parm <- data.frame(corr=sapply(select.pc.env,"[[",4),pval=sapply(select.pc.env,"[[",3))
   i <- which(select.parm$pval < alpha.pc.env & abs(select.parm$corr) > corr.pc.env )
-  i <- ifelse(length(i)==0,which.max(abs(select.parm$corr)),i)
+  if(length(i)==0 | length(i)>1){
+    i <- which.max(abs(select.parm$corr))
+  } else if(length(i)==1) i <- i
+  #i <- ifelse(length(i)==0,which.max(abs(select.parm$corr)),i)
   PC <- PCs[,i]
   if(plot.pc.env==TRUE){
     plot(PC,ENV,type="n",las=1,bty="L",xlab=paste("PCoA",i),ylab=ENV.name)
