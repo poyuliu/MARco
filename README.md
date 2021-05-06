@@ -2,7 +2,7 @@
 
 **MARco** is an R code and function set for microbiome analysis with less pain to generate basic plots of microbial ecology, including alpha diversity boxplots, violin plots, beta diversity ordination (PCoA based on Bray-Curtis dissimilarity) with ADONIS test, and several statistical and visualization tools (see below). **MARco** also contains several discrete color sets for applying to your grouped plots. For advanced analysis, co-occurrence network analysis is also able to conduct by **MARco**.
 
-All updated codes will be released on <http://www.lifescipy.net/RcodeDB/MARco.html>.
+Tutorial and all updated codes will be released on <http://www.lifescipy.net/RcodeDB/MARco.html>.
 
 **Please cites:**  
 ~~Liu, P.-Y. _MARco: Microbiome Analysis RcodeDB_ (2020). Available at: <https://github.com/poyuliu/MARco/>. (Accessed: Day Month Year)~~   
