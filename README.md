@@ -5,8 +5,8 @@
 All updated codes will be released on <http://www.lifescipy.net/RcodeDB/MARco.html>.
 
 **Please cites:**  
-Liu, P.-Y. _MARco: Microbiome Analysis RcodeDB_ (2020). Available at: <https://github.com/poyuliu/MARco/>. (Accessed: Day Month Year)
-
+~~Liu, P.-Y. _MARco: Microbiome Analysis RcodeDB_ (2020). Available at: <https://github.com/poyuliu/MARco/>. (Accessed: Day Month Year)~~   
+Liu, P.-Y. _poyuliu/MARco: MARco: Microbiome Analysis RcodeDB (Version v1.0)_. Zenodo. Available online: http://doi.org/10.5281/zenodo.4589898 (accessed on Day Month Year).
 
 ### Required packages:
 `vegan` with functions for most community ecology analyses  
