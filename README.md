@@ -5,8 +5,7 @@
 Tutorial and all updated codes will be released on <http://www.lifescipy.net/RcodeDB/MARco.html>.
 
 **Please cites:**  
-~~Liu, P.-Y. _MARco: Microbiome Analysis RcodeDB_ (2020). Available at: <https://github.com/poyuliu/MARco/>. (Accessed: Day Month Year)~~   
-Liu, P.-Y. _poyuliu/MARco: MARco: Microbiome Analysis RcodeDB (Version v1.0)_. Zenodo. Available online: http://doi.org/10.5281/zenodo.4589898 (accessed on Day Month Year).
+Liu, P.-Y. _poyuliu/MARco: MARco: Microbiome Analysis RcodeDB (Version v1.0)_. Zenodo. Available online: http://doi.org/10.5281/zenodo.4589897 (accessed on Day Month Year).
 
 ### Required packages:
 `vegan` with functions for most community ecology analyses  
@@ -19,15 +18,16 @@ Liu, P.-Y. _poyuliu/MARco: MARco: Microbiome Analysis RcodeDB (Version v1.0)_. Z
 `MASS` for LDA (linear discriminant analysis) effect size (LEfSe)  
 `gage` for GAGE (Generally Applicable Gene-set Enrichment) analysis  
 `cluster` and `clusterSim` for Enterotyping  
-`randomForest`, `plyr`, `rfUtilities`, `caret`, `ROCR` and `pROC` for Random Forest analysis
+`randomForest`, `plyr`, `rfUtilities`, `caret`, `ROCR` and `pROC` for Random Forest analysis  
+`doParallel` for Windows version Random Forest analysis (`runRFwin()`)  
 
 ### Available codes & how to use:
-~~source("http://www.lifescipy.net/RcodeDB/FN_microbiome.R") # Microbiome analysis function set~~
-~~source("http://www.lifescipy.net/RcodeDB/FN_colsets.R") # color sets~~
-~~source("http://www.lifescipy.net/RcodeDB/FN_network.R") # network analysis function modules~~
-~~source("http://www.lifescipy.net/RcodeDB/FN_RandomForest.R") # Random Forest function modules~~
-~~source("http://www.lifescipy.net/RcodeDB/FN_enterotyping.R") # Enterotyping~~ 
-~~source("http://www.lifescipy.net/RcodeDB/FN_KO2PathwayModule.R") # Reformat KEGG Orthology (KO) to pathways and modules from metagenome, metatranscriptome, or functional prediction data~~
+1. Microbiome analysis function set
+2. color sets
+3. network analysis function modules
+4. Random Forest function modules
+5. Enterotyping 
+6. Reformat KEGG Orthology (KO) to pathways and modules from metagenome, metatranscriptome, or functional prediction data  
 
 install dependencies from Bioconductor  
 ```
