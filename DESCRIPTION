@@ -1,7 +1,7 @@
 Package: MARco
 Type: Package
 Title: MARco: Microbiome Analysis RcodeDB
-Version: 1.0.0
+Version: 1.0.1
 Author: Po-Yu Liu
 Maintainer: Po-Yu Liu <poyu.liu@gmail.com>
 Description: MARco is an R code and function set for microbiome analysis with less pain to generate basic plots of microbial ecology, including alpha diversity boxplots, violin plots, beta diversity ordination (PCoA based on Bray-Curtis dissimilarity) with ADONIS test, and several statistical and visualization tools (see below). MARco also contains several discrete color sets for applying to your grouped plots. For advanced analysis, co-occurrence network analysis is also able to conduct by MARco.
@@ -9,6 +9,6 @@ Description: MARco is an R code and function set for microbiome analysis with le
 License: none
 Encoding: UTF-8
 LazyData: true
-Imports: vegan, fossil, vioplot, igraph, SpiecEasi, DESeq2, pheatmap, MASS, gage, cluster, clusterSim, randomForest, plyr, rfUtilities, caret, ROCR, pROC
-Suggests: doMC, knitr
+Imports: vegan, fossil, vioplot, igraph, pheatmap, MASS, cluster, clusterSim, randomForest, plyr, rfUtilities, caret, ROCR, pROC
+Suggests: doMC, knitr, doParallel, SpiecEasi, DESeq2, gage
 RoxygenNote: 7.1.1

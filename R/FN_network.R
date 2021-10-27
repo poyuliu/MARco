@@ -1,10 +1,10 @@
-list.of.packages <- c("igraph")
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
+#list.of.packages <- c("igraph")
+#new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+#if(length(new.packages)) install.packages(new.packages)
 
 #required packages
-require(SpiecEasi)
-require(igraph)
+#require(SpiecEasi)
+#require(igraph)
 
 
 ###### FUNCTION 01 #####

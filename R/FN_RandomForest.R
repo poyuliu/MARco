@@ -1,12 +1,12 @@
 
 #required packages
-require("randomForest")
-require("plyr") # for the "arrange" function
-require("rfUtilities") # to test model significance
-require("caret") # to get leave-one-out cross-validation accuracies and also contains the nearZeroVar function 
-require("ROCR")
-require("pROC")
-require("doMC")
+#require("randomForest")
+#require("plyr") # for the "arrange" function
+#require("rfUtilities") # to test model significance
+#require("caret") # to get leave-one-out cross-validation accuracies and also contains the nearZeroVar function 
+#require("ROCR")
+#require("pROC")
+#require("doMC")
 
 #Removing Rare Features
 remove_rare <- function( table , cutoff_pro ) {
@@ -39,6 +39,7 @@ runRF <- function(otu_table_scaled,Y,metadata,model=c("classification","regressi
   require("plyr") # for the "arrange" function
   require("rfUtilities") # to test model significance
   require("caret") # to get leave-one-out cross-validation accuracies and also contains the nearZeroVar function 
+  require("doMC")
   try(if(model!="classification" & model!="regression") stop("Must select an RF model type: 'classification' or 'regression'!"))
   otu_table_scaled_data <- data.frame(t(otu_table_scaled))  
   attach(metadata)
@@ -96,6 +97,96 @@ runRF <- function(otu_table_scaled,Y,metadata,model=c("classification","regressi
   
 }
 
+#RF for Windows version R 
+runRFwin <- function (otu_table_scaled, Y, metadata, model = c("classification", 
+                                                             "regression"), ntree = 501, cores = 4, plotALL = FALSE, 
+                    plotTOP10 = FALSE) 
+{
+  require("randomForest")
+  require("plyr")
+  require("rfUtilities")
+  require("caret")
+  require("doParallel")
+  try(if (model != "classification" & model != "regression") 
+    stop("Must select an RF model type: 'classification' or 'regression'!"))
+  otu_table_scaled_data <- data.frame(t(otu_table_scaled))
+  attach(metadata)
+  otu_table_scaled_data$meta <- Y
+  registerDoParallel(cores)
+  RF_model <- foreach(y = seq(10), .combine = combine) %dopar% 
+    {
+      set.seed(151)
+      RF_model_parallel <- randomForest::randomForest(x = otu_table_scaled_data[, 
+                                                                                1:(ncol(otu_table_scaled_data) - 1)], y = otu_table_scaled_data[, 
+                                                                                                                                                ncol(otu_table_scaled_data)], ntree = ntree, 
+                                                      importance = TRUE, proximities = TRUE)
+    }
+  RF_model_sig <- rf.significance(x = RF_model, xdata = otu_table_scaled_data[, 
+                                                                              1:(ncol(otu_table_scaled_data) - 1)], nperm = 1000, 
+                                  ntree = ntree)
+  fit_control <- trainControl(method = "LOOCV")
+  RF_model_loocv <- train(otu_table_scaled_data[, 1:(ncol(otu_table_scaled_data) - 
+                                                       1)], y = otu_table_scaled_data[, ncol(otu_table_scaled_data)], 
+                          method = "rf", ntree = ntree, tuneGrid = data.frame(mtry = RF_model$mtry), 
+                          trControl = fit_control)
+  model <- match.arg(model, )
+  if (model == "classification") {
+    RF_model_classify_imp <- as.data.frame(RF_model$importance)
+    RF_model_classify_imp$features <- rownames(RF_model_classify_imp)
+    RF_model_classify_imp_sorted <- arrange(RF_model_classify_imp, 
+                                            desc(MeanDecreaseAccuracy))
+    if (plotALL == TRUE & plotTOP10 == TRUE) {
+      par(mfrow = c(1, 2))
+      barplot(RF_model_classify_imp_sorted$MeanDecreaseAccuracy, 
+              ylab = "Mean Decrease in Accuracy (Variable Importance)", 
+              main = "RF Classification Variable Importance Distribution")
+      barplot(RF_model_classify_imp_sorted[1:10, "MeanDecreaseAccuracy"], 
+              names.arg = RF_model_classify_imp_sorted[1:10, 
+                                                       "features"], ylab = "Mean Decrease in Accuracy (Variable Importance)", 
+              las = 2, main = "Classification RF")
+    }
+    else if (plotALL == TRUE & plotTOP10 == FALSE) {
+      barplot(RF_model_classify_imp_sorted$MeanDecreaseAccuracy, 
+              ylab = "Mean Decrease in Accuracy (Variable Importance)", 
+              main = "RF Classification Variable Importance Distribution")
+    }
+    else if (plotALL == FALSE & plotTOP10 == TRUE) {
+      barplot(RF_model_classify_imp_sorted[1:10, "MeanDecreaseAccuracy"], 
+              names.arg = RF_model_classify_imp_sorted[1:10, 
+                                                       "features"], ylab = "Mean Decrease in Accuracy (Variable Importance)", 
+              las = 2, main = "Classification RF")
+    }
+    return(list(RFmodel = RF_model, PermuTest = RF_model_sig, 
+                LOOCV = RF_model_loocv, SortFeature = RF_model_classify_imp_sorted))
+  }
+  else if (model == "regression") {
+    RF_model_regress_imp <- as.data.frame(RF_model$importance)
+    RF_model_regress_imp$features <- rownames(RF_model_regress_imp)
+    RF_model_regress_imp_sorted <- arrange(RF_model_regress_imp, 
+                                           desc(`%IncMSE`))
+    if (plotALL == TRUE & plotTOP10 == TRUE) {
+      par(mfrow = c(1, 2))
+      barplot(RF_model_regress_imp_sorted$`%IncMSE`, ylab = "% Increase in Mean Squared Error (Variable Importance)", 
+              main = "RF Regression Variable Importance Distribution")
+      barplot(RF_model_regress_imp_sorted[1:10, "%IncMSE"], 
+              names.arg = RF_model_regress_imp_sorted[1:10, 
+                                                      "features"], ylab = "% Increase in Mean Squared Error (Variable Importance)", 
+              las = 2, main = "Regression RF")
+    }
+    else if (plotALL == TRUE & plotTOP10 == FALSE) {
+      barplot(RF_model_regress_imp_sorted$`%IncMSE`, ylab = "% Increase in Mean Squared Error (Variable Importance)", 
+              main = "RF Regression Variable Importance Distribution")
+    }
+    else if (plotALL == FALSE & plotTOP10 == TRUE) {
+      barplot(RF_model_regress_imp_sorted[1:10, "%IncMSE"], 
+              names.arg = RF_model_regress_imp_sorted[1:10, 
+                                                      "features"], ylab = "% Increase in Mean Squared Error (Variable Importance)", 
+              las = 2, main = "Regression RF")
+    }
+    return(list(RFmodel = RF_model, PermuTest = RF_model_sig, 
+                LOOCV = RF_model_loocv, SortFeature = RF_model_regress_imp_sorted))
+  }
+}
 
 
 RF2ROC <- function(RFmodel,plot=FALSE,col="#003366"){
