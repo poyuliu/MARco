@@ -22,12 +22,21 @@ Liu, P.-Y. _poyuliu/MARco: MARco: Microbiome Analysis RcodeDB (Version v1.0)_. Z
 `doParallel` for Windows version Random Forest analysis (`runRFwin()`)  
 
 ### Available codes & how to use:
+<<<<<<< HEAD
 1. Microbiome analysis function set
 2. color sets
 3. network analysis function modules
 4. Random Forest function modules
 5. Enterotyping 
 6. Reformat KEGG Orthology (KO) to pathways and modules from metagenome, metatranscriptome, or functional prediction data  
+=======
+# Microbiome analysis function set
+# color sets
+# network analysis function modules
+# Random Forest function modules
+# Enterotyping 
+# Reformat KEGG Orthology (KO) to pathways and modules from metagenome, metatranscriptome, or functional prediction data  
+>>>>>>> 18f46fb9689f30ad786ecd20d90f0196543b7505
 
 install dependencies from Bioconductor  
 ```
