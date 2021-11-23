@@ -910,8 +910,8 @@ adonisx <- function (formula, data = NULL, permutations = 999, method = "bray",
     beta.sites <- qr.coef(qrhs, dist.lhs)
     beta.spp <- qr.coef(qrhs, as.matrix(lhs))
   }
-  colnames(beta.spp) <- colnames(lhs)
-  colnames(beta.sites) <- rownames(lhs)
+  colnames(beta.spp) <- NULL
+  colnames(beta.sites) <- NULL
   F.Mod <- (SS.Exp.each/df.Exp)/(SS.Res/df.Res)
   f.test <- function(tH, G, df.Exp, df.Res, tIH.snterm) {
     (sum(G * tH)/df.Exp)/(sum(G * tIH.snterm)/df.Res)

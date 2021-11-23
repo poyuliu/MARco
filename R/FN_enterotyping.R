@@ -1,11 +1,11 @@
-list.of.packages <- c("clusterSim","ade4")
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
-#required packages
-require(clusterSim)
-require(ade4)
-require(vegan)
+#list.of.packages <- c("clusterSim","ade4")
+#new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+#if(length(new.packages)) install.packages(new.packages)
+#
+##required packages
+#require(clusterSim)
+#require(ade4)
+#require(vegan)
 
 
 dist.JSD <- function(inMatrix, pseudocount=0.000001, ...) {
@@ -31,8 +31,7 @@ dist.JSD <- function(inMatrix, pseudocount=0.000001, ...) {
 }
 
 pam.clustering=function(x,k) { # x is a distance matrix and k the number of clusters
-  require(cluster)
-  cluster = as.vector(pam(as.dist(x), k, diss=TRUE)$clustering)
+  cluster = as.vector(cluster::pam(as.dist(x), k, diss=TRUE)$clustering)
   return(cluster)
 }
 
@@ -76,41 +75,41 @@ enterotyping <- function(otu,remove.noise=TRUE,rm.pct=0.01,kx=NULL){
 }
 
 plot.ET <- function(enterotyping,colset,...){
-  ordNtest <- function(data,group,dist=NULL){
-    if(is.null(dist)){
-      bc.dist <- vegan::vegdist(t(data))
-    } else if(!is.null(dist)){
-      bc.dist <- dist
-    }
-    pcoa <- cmdscale(bc.dist,eig = T)
-    set.seed(123); permanova <- vegan::adonis(bc.dist~group)
-    return(list(pcoa=pcoa,permanova=permanova))
-  }
-  plot.ordi <- function(ordN,group,colset,ordiellipse=FALSE,ordispider=FALSE,plot=TRUE,pch=19,legend=NULL,test=FALSE,ordilabel=NULL){
-    ord <- ordN$pcoa
-    pct <- round(prop.table(ord$eig[ord$eig>0])*100,2)
-    par(mar=c(5.1,4.1,4.1,10.1))
-    if(length(pct)>0){
-      plot(vegan::scores(ord),type="n",las=1,
-           xlab=paste0("PCoA1 (",round(pct[1],2),"%)"),ylab=paste0("PCoA2 (",round(pct[2],2),"%)"))
-    } else if(length(pct)==0) plot(vegan::scores(ord),type="n",las=1,xlab="Dim1",ylab="Dim2")
-    if(ordiellipse==TRUE) vegan::ordiellipse(ord,group,col = colset,lwd = 0.5)
-    if(ordispider==TRUE) vegan::ordispider(ord,group,col = colset,lwd = 0.5)
-    if(plot==TRUE & length(pch)>1){
-      points(vegan::scores(ord),pch=pch[as.numeric(group)],cex=1,col=paste0(colset,"aa")[as.numeric(group)])
-    } else if(plot==TRUE & length(pch)==1) points(vegan::scores(ord),pch=pch,cex=1,col=paste0(colset,"aa")[as.numeric(group)])
-    if(!is.null(legend)) legend("topright",legend =legend ,pch=pch,col=paste0(colset,"aa"),bty="n",cex=0.8,xpd=T,inset = c(-0.3,0))
-    if(test==TRUE) {
-      p <- format(ordN$permanova$aov.tab$`Pr(>F)`[1],digits = 2)
-      r2 <- format(ordN$permanova$aov.tab$R2[1],digits = 2)
-      legend("bottomright",legend =bquote(R^2 == .(r2)),bty="n",cex=0.8,xpd=T,inset = c(-0.2,0.06))
-      legend("bottomright",legend =bquote(italic(p == .(p))),bty="n",cex=0.8,xpd=T,inset = c(-0.2,0))
-    }
-    if(!is.null(ordilabel)){
-      vegan::ordilabel(scores(ordN$pcoa),cex = 0.7,fill = "#cacaca55",border = 1,col = "#1b262c",
-                       select = which(rownames(scores(ordN$pcoa)) %in% ordilabel))
-    }
-  }
+  #ordNtest <- function(data,group,dist=NULL){
+  #  if(is.null(dist)){
+  #    bc.dist <- vegan::vegdist(t(data))
+  #  } else if(!is.null(dist)){
+  #    bc.dist <- dist
+  #  }
+  #  pcoa <- cmdscale(bc.dist,eig = T)
+  #  set.seed(123); permanova <- adonisx(bc.dist~group)
+  #  return(list(pcoa=pcoa,permanova=permanova))
+  #}
+  #plot.ordi <- function(ordN,group,colset,ordiellipse=FALSE,ordispider=FALSE,plot=TRUE,pch=19,legend=NULL,test=FALSE,ordilabel=NULL){
+  #  ord <- ordN$pcoa
+  #  pct <- round(prop.table(ord$eig[ord$eig>0])*100,2)
+  #  par(mar=c(5.1,4.1,4.1,10.1))
+  #  if(length(pct)>0){
+  #    plot(vegan::scores(ord),type="n",las=1,
+  #         xlab=paste0("PCoA1 (",round(pct[1],2),"%)"),ylab=paste0("PCoA2 (",round(pct[2],2),"%)"))
+  #  } else if(length(pct)==0) plot(vegan::scores(ord),type="n",las=1,xlab="Dim1",ylab="Dim2")
+  #  if(ordiellipse==TRUE) vegan::ordiellipse(ord,group,col = colset,lwd = 0.5)
+  #  if(ordispider==TRUE) vegan::ordispider(ord,group,col = colset,lwd = 0.5)
+  #  if(plot==TRUE & length(pch)>1){
+  #    points(vegan::scores(ord),pch=pch[as.numeric(group)],cex=1,col=paste0(colset,"aa")[as.numeric(group)])
+  #  } else if(plot==TRUE & length(pch)==1) points(vegan::scores(ord),pch=pch,cex=1,col=paste0(colset,"aa")[as.numeric(group)])
+  #  if(!is.null(legend)) legend("topright",legend =legend ,pch=pch,col=paste0(colset,"aa"),bty="n",cex=0.8,xpd=T,inset = c(-0.3,0))
+  #  if(test==TRUE) {
+  #    p <- format(ordN$permanova$aov.tab$`Pr(>F)`[1],digits = 2)
+  #    r2 <- format(ordN$permanova$aov.tab$R2[1],digits = 2)
+  #    legend("bottomright",legend =bquote(R^2 == .(r2)),bty="n",cex=0.8,xpd=T,inset = c(-0.2,0.06))
+  #    legend("bottomright",legend =bquote(italic(p == .(p))),bty="n",cex=0.8,xpd=T,inset = c(-0.2,0))
+  #  }
+  #  if(!is.null(ordilabel)){
+  #    vegan::ordilabel(scores(ordN$pcoa),cex = 0.7,fill = "#cacaca55",border = 1,col = "#1b262c",
+  #                     select = which(rownames(scores(ordN$pcoa)) %in% ordilabel))
+  #  }
+  #}
   
   pcoa <- ordNtest(data = enterotyping$otu,
                    group = as.factor(enterotyping$data.cluster),
