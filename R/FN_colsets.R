@@ -4,6 +4,7 @@ colset.d.5 <- c("#4285F4","#FBBC05","#EA4335","#0b5e12","#2e2128")
 colset.d.5 <- c("#4285F4","#FBBC05","#EA4335","#0b5e12","#2e2128")
 colset.d.6 <- c("#003C78","#FFBE00","#46961E","#645AA0","#D25500","#474747")
 colset.d.12 <- c('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928')
+colset.tax <- c("#CBD588","#87CEEB","#FFE4E1","#5F7FC7","#FFA500","#DA5724","#508578","#CD9BCD","#E6E6FA","#AD6F3B","#673770","#652926","#C84248","#8569D5","#FF6347","#E0FFFF","#FFF8DC","#5E738F","#D1A33D","#8A7C64","#599861","#ADD8E6")
 
 
 darker.col <- function(colset,degree=30){
