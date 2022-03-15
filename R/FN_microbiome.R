@@ -29,29 +29,48 @@ ordNtest <- function(data,group,dist=NULL){
 
 
 # Betadicersity 02
-plot.ordi <- function(ordN,group,colset,ordiellipse=FALSE,ordispider=FALSE,plot=TRUE,pch=19,legend=NULL,test=FALSE,ordilabel=NULL){
+plot.ordi <- function (ordN, group, colset, ordiellipse = FALSE, ordispider = FALSE, 
+                       plot = TRUE, pch = 19, legend = NULL, test = FALSE, ordilabel = NULL,
+                       right_frame=10.1,inset=c(-0.3,-0.2)) 
+{
   ord <- ordN$pcoa
-  pct <- round(prop.table(ord$eig[ord$eig>0])*100,2)
-  par(mar=c(5.1,4.1,4.1,10.1))
-  if(length(pct)>0){
-    plot(vegan::scores(ord),type="n",las=1,
-         xlab=paste0("PCoA1 (",round(pct[1],2),"%)"),ylab=paste0("PCoA2 (",round(pct[2],2),"%)"))
-  } else if(length(pct)==0) plot(vegan::scores(ord),type="n",las=1,xlab="Dim1",ylab="Dim2")
-  if(ordiellipse==TRUE) vegan::ordiellipse(ord,group,col = colset,lwd = 0.5)
-  if(ordispider==TRUE) vegan::ordispider(ord,group,col = colset,lwd = 0.5)
-  if(plot==TRUE & length(pch)>1){
-    points(vegan::scores(ord),pch=pch[as.numeric(group)],cex=1,col=paste0(colset,"aa")[as.numeric(group)])
-  } else if(plot==TRUE & length(pch)==1) points(vegan::scores(ord),pch=pch,cex=1,col=paste0(colset,"aa")[as.numeric(group)])
-  if(!is.null(legend)) legend("topright",legend =legend ,pch=pch,col=paste0(colset,"aa"),bty="n",cex=0.8,xpd=T,inset = c(-0.3,0))
-  if(test==TRUE) {
-    p <- format(ordN$permanova$aov.tab$`Pr(>F)`[1],digits = 2)
-    r2 <- format(ordN$permanova$aov.tab$R2[1],digits = 2)
-    legend("bottomright",legend =bquote(R^2 == .(r2)),bty="n",cex=0.8,xpd=T,inset = c(-0.2,0.06))
-    legend("bottomright",legend =bquote(italic(p == .(p))),bty="n",cex=0.8,xpd=T,inset = c(-0.2,0))
+  pct <- round(prop.table(ord$eig[ord$eig > 0]) * 100, 2)
+  par(mar = c(5.1, 4.1, 4.1, right_frame))
+  if (length(pct) > 0) {
+    plot(vegan::scores(ord), type = "n", las = 1, xlab = paste0("PCoA1 (", 
+                                                                round(pct[1], 2), "%)"), ylab = paste0("PCoA2 (", 
+                                                                                                       round(pct[2], 2), "%)"))
   }
-  if(!is.null(ordilabel)){
-    vegan::ordilabel(scores(ordN$pcoa),cex = 0.7,fill = "#cacaca55",border = 1,col = "#1b262c",
-              select = which(rownames(scores(ordN$pcoa)) %in% ordilabel))
+  else if (length(pct) == 0) 
+    plot(vegan::scores(ord), type = "n", las = 1, xlab = "Dim1", 
+         ylab = "Dim2")
+  if (ordiellipse == TRUE) 
+    vegan::ordiellipse(ord, group, col = colset, lwd = 0.5)
+  if (ordispider == TRUE) 
+    vegan::ordispider(ord, group, col = colset, lwd = 0.5)
+  if (plot == TRUE & length(pch) > 1) {
+    points(vegan::scores(ord), pch = pch[as.numeric(group)], 
+           cex = 1, col = paste0(colset, "aa")[as.numeric(group)])
+  }
+  else if (plot == TRUE & length(pch) == 1) 
+    points(vegan::scores(ord), pch = pch, cex = 1, col = paste0(colset, 
+                                                                "aa")[as.numeric(group)])
+  if (!is.null(legend)) 
+    legend("topright", legend = legend, pch = pch, col = paste0(colset, 
+                                                                "aa"), bty = "n", cex = 0.8, xpd = T, inset = c(inset[1], 
+                                                                                                                0))
+  if (test == TRUE) {
+    p <- format(ordN$permanova$aov.tab$`Pr(>F)`[1], digits = 2)
+    r2 <- format(ordN$permanova$aov.tab$R2[1], digits = 2)
+    legend("bottomright", legend = bquote(R^2 == .(r2)), 
+           bty = "n", cex = 0.8, xpd = T, inset = c(inset[2], 0.06))
+    legend("bottomright", legend = bquote(italic(p == .(p))), 
+           bty = "n", cex = 0.8, xpd = T, inset = c(inset[2], 0))
+  }
+  if (!is.null(ordilabel)) {
+    vegan::ordilabel(scores(ordN$pcoa), cex = 0.7, fill = "#cacaca55", 
+                     border = 1, col = "#1b262c", select = which(rownames(scores(ordN$pcoa)) %in% 
+                                                                   ordilabel))
   }
 }
 
@@ -167,59 +186,79 @@ alphdiv <- function(data,group,test=FALSE){
 }
 
 # Alpha diversity 02
-jitter.points <- function(data,groups,colset){
-  for(i in 1:length(groups)){
-    set.seed(123)
-    points(jitter(rep(i,sum(as.numeric(groups)==i)),8/(2^(i-1))),data[as.numeric(groups)==i],pch=21,bg=colset[i],cex=1.1)
+jitter.points <- function (data, groups, colset) 
+{
+  x <- list()
+  for (i in 1:length(groups)) {
+    #set.seed(123)
+    x[[i]] <- jitter(rep(1, sum(as.numeric(groups) == i)), 8)
+  }
+  points(x[[1]], data[as.numeric(groups) == 1], pch = 21, bg = colset[1], cex = 1.1)
+  for(i in 2:length(groups)){
+    points((x[[i]]+(i-1)), data[as.numeric(groups) == i], pch = 21, bg = colset[i], cex = 1.1)
   }
 }
 
-# Alpha diversity 03
-plot.alpha <- function(alpha,group,colset,names=NULL,ObservedOTU=TRUE,Shannon=TRUE,Simpson=TRUE,Chao1=TRUE,test=FALSE){
-  par(bty="L")
-  if(ObservedOTU==TRUE) {
-    boxplot(alpha$obsOTU~group,las=1,xlab="",ylab="Observed OTU",col=paste0(colset,"99"),names=names,pch=NA)
-    jitter.points(alpha$obsOTU,group,colset)
-    if(test==TRUE & !is.null(alpha$obsOTU.stat)){
-      legend("topright",
-             legend = paste("p ",ifelse(alpha$obsOTU.stat$p.value>=0.001,paste("=",round(alpha$obsOTU.stat$p.value,3)),"< 0.001")),
-             bty="n",xpd=T,inset = -0.05)
-    } else if(test==TRUE & is.null(alpha$obsOTU.stat)) warning("Alpha lacks testings!")
-  }
-  if(Shannon==TRUE) {
-    boxplot(alpha$shannon~group,las=1,xlab="",ylab="Shannon's index",col=paste0(colset,"99"),names=names,pch=NA)
-    jitter.points(alpha$shannon,group,colset)
-    if(test==TRUE & !is.null(alpha$shannon.stat)){
-      legend("topright",
-             legend = paste("p ",ifelse(alpha$shannon.stat$p.value>=0.001,paste("=",round(alpha$shannon.stat$p.value,3)),"< 0.001")),
-             bty="n",xpd=T,inset = -0.05)
-    } else if(test==TRUE & is.null(alpha$shannon.stat)) warning("Alpha lacks testings!")
-  }
-  if(Simpson==TRUE) {
-    boxplot(alpha$simpson~group,las=1,xlab="",ylab="Simpson's index",col=paste0(colset,"99"),names=names,pch=NA)
-    jitter.points(alpha$simpson,group,colset)
-    if(test==TRUE & !is.null(alpha$simpson.stat)){
-      legend("topright",
-             legend = paste("p ",ifelse(alpha$simpson.stat$p.value>=0.001,paste("=",round(alpha$simpson.stat$p.value,3)),"< 0.001")),
-             bty="n",xpd=T,inset = -0.05)
-    } else if(test==TRUE & is.null(alpha$simpson.stat)) warning("Alpha lacks testings!")
-  }
-  if(Chao1==TRUE) {
-    boxplot(alpha$chao1~group,las=1,xlab="",ylab="Chao1 index",col=paste0(colset,"99"),names=names,pch=NA)
-    jitter.points(alpha$chao1,group,colset)
-    if(test==TRUE & !is.null(alpha$chao1.stat)){
-      legend("topright",
-             legend = paste("p ",ifelse(alpha$chao1.stat$p.value>=0.001,paste("=",round(alpha$chao1.stat$p.value,3)),"< 0.001")),
-             bty="n",xpd=T,inset = -0.05)
-    } else if(test==TRUE & is.null(alpha$chao1.stat)) warning("Alpha lacks testings!")
-  }
 
+# Alpha diversity 03
+plot.alpha <- function (alpha, group, colset, names = NULL, Richness = TRUE, 
+                        Shannon = TRUE, Simpson = TRUE, Chao1 = TRUE, test = FALSE,...) 
+{
+  par(bty = "L")
+  if (Richness == TRUE) {
+    boxplot(alpha$obsOTU ~ group, ..., xlab = "", ylab = "Richness", 
+            col = paste0(colset, "99"), names = names, pch = NA)
+    jitter.points(alpha$obsOTU, group, colset)
+    if (test == TRUE & !is.null(alpha$obsOTU.stat)) {
+      legend("topright", legend = paste("p ", ifelse(alpha$obsOTU.stat$p.value >= 
+                                                       0.001, paste("=", round(alpha$obsOTU.stat$p.value, 
+                                                                               3)), "< 0.001")), bty = "n", xpd = T, inset = -0.05)
+    }
+    else if (test == TRUE & is.null(alpha$obsOTU.stat)) 
+      warning("Alpha lacks testings!")
+  }
+  if (Shannon == TRUE) {
+    boxplot(alpha$shannon ~ group, ..., xlab = "", ylab = "Shannon's index", 
+            col = paste0(colset, "99"), names = names, pch = NA)
+    jitter.points(alpha$shannon, group, colset)
+    if (test == TRUE & !is.null(alpha$shannon.stat)) {
+      legend("topright", legend = paste("p ", ifelse(alpha$shannon.stat$p.value >= 
+                                                       0.001, paste("=", round(alpha$shannon.stat$p.value, 
+                                                                               3)), "< 0.001")), bty = "n", xpd = T, inset = -0.05)
+    }
+    else if (test == TRUE & is.null(alpha$shannon.stat)) 
+      warning("Alpha lacks testings!")
+  }
+  if (Simpson == TRUE) {
+    boxplot(alpha$simpson ~ group, ..., xlab = "", ylab = "Simpson's index", 
+            col = paste0(colset, "99"), names = names, pch = NA)
+    jitter.points(alpha$simpson, group, colset)
+    if (test == TRUE & !is.null(alpha$simpson.stat)) {
+      legend("topright", legend = paste("p ", ifelse(alpha$simpson.stat$p.value >= 
+                                                       0.001, paste("=", round(alpha$simpson.stat$p.value, 
+                                                                               3)), "< 0.001")), bty = "n", xpd = T, inset = -0.05)
+    }
+    else if (test == TRUE & is.null(alpha$simpson.stat)) 
+      warning("Alpha lacks testings!")
+  }
+  if (Chao1 == TRUE) {
+    boxplot(alpha$chao1 ~ group, ..., xlab = "", ylab = "Chao1 index", 
+            col = paste0(colset, "99"), names = names, pch = NA)
+    jitter.points(alpha$chao1, group, colset)
+    if (test == TRUE & !is.null(alpha$chao1.stat)) {
+      legend("topright", legend = paste("p ", ifelse(alpha$chao1.stat$p.value >= 
+                                                       0.001, paste("=", round(alpha$chao1.stat$p.value, 
+                                                                               3)), "< 0.001")), bty = "n", xpd = T, inset = -0.05)
+    }
+    else if (test == TRUE & is.null(alpha$chao1.stat)) 
+      warning("Alpha lacks testings!")
+  }
 }
 
 # Alpha diversity 04
-vioplot.alpha <- function(alpha,group,colset,names=NULL,ObservedOTU=TRUE,Shannon=TRUE,Simpson=TRUE,Chao1=TRUE,test=FALSE){
-  if(ObservedOTU==TRUE) {
-    vioplot::vioplot(alpha$obsOTU~group,las=1,xlab="",ylab="Observed OTU",col=paste0(colset,"99"),names=names)
+vioplot.alpha <- function(alpha,group,colset,names=NULL,Richness=TRUE,Shannon=TRUE,Simpson=TRUE,Chao1=TRUE,test=FALSE,...){
+  if(Richness==TRUE) {
+    vioplot::vioplot(alpha$obsOTU~group,...,xlab="",ylab="Richness",col=paste0(colset,"99"),names=names)
     jitter.points(alpha$obsOTU,group,colset)
     if(test==TRUE & !is.null(alpha$obsOTU.stat)){
       legend("topright",
@@ -228,7 +267,7 @@ vioplot.alpha <- function(alpha,group,colset,names=NULL,ObservedOTU=TRUE,Shannon
     } else if(test==TRUE & is.null(alpha$obsOTU.stat)) warning("Alpha lacks testings!")
   }
   if(Shannon==TRUE) {
-    vioplot::vioplot(alpha$shannon~group,las=1,xlab="",ylab="Shannon's index",col=paste0(colset,"99"),names=names)
+    vioplot::vioplot(alpha$shannon~group,...,xlab="",ylab="Shannon's index",col=paste0(colset,"99"),names=names)
     jitter.points(alpha$shannon,group,colset)
     if(test==TRUE & !is.null(alpha$shannon.stat)){
       legend("topright",
@@ -237,7 +276,7 @@ vioplot.alpha <- function(alpha,group,colset,names=NULL,ObservedOTU=TRUE,Shannon
     } else if(test==TRUE & is.null(alpha$shannon.stat)) warning("Alpha lacks testings!")
   }
   if(Simpson==TRUE) {
-    vioplot::vioplot(alpha$simpson~group,las=1,xlab="",ylab="Simpson's index",col=paste0(colset,"99"),names=names)
+    vioplot::vioplot(alpha$simpson~group,...,xlab="",ylab="Simpson's index",col=paste0(colset,"99"),names=names)
     jitter.points(alpha$simpson,group,colset)
     if(test==TRUE & !is.null(alpha$simpson.stat)){
       legend("topright",
@@ -246,7 +285,7 @@ vioplot.alpha <- function(alpha,group,colset,names=NULL,ObservedOTU=TRUE,Shannon
     } else if(test==TRUE & is.null(alpha$simpson.stat)) warning("Alpha lacks testings!")
   }
   if(Chao1==TRUE) {
-    vioplot::vioplot(alpha$chao1~group,las=1,xlab="",ylab="Chao1 index",col=paste0(colset,"99"),names=names)
+    vioplot::vioplot(alpha$chao1~group,...,xlab="",ylab="Chao1 index",col=paste0(colset,"99"),names=names)
     jitter.points(alpha$chao1,group,colset)
     if(test==TRUE & !is.null(alpha$chao1.stat)){
       legend("topright",
