@@ -313,7 +313,7 @@ DESq2 <- function(data,group){
 }
 
 # DESeq2 volcano plot
-volcano.plot <- function(DESeq.res,colset,p.adj=TRUE,alpha=0.05){
+volcano.plot <- function(DESeq.res,colset,p.adj=TRUE,alpha=0.05,...){
   FC2 <- DESeq.res$log2FoldChange
   if(p.adj==TRUE){
     PADJ <- DESeq.res$padj
@@ -321,7 +321,7 @@ volcano.plot <- function(DESeq.res,colset,p.adj=TRUE,alpha=0.05){
     plot(FC2,-log10(PADJ),
          type="n",xlab=expression(Log[2]~"fold change"),ylab=expression(-Log[10]~"adjusted P"))
     grid()
-    abline(v=c(2,-2),h=-log10(alpha))
+    abline(v=c(1,-1),h=-log10(alpha),...)
     colX <- colset[as.numeric(FC2>0)+1]
     colX[which(PADJ >= alpha)] <- paste0(colX[which(PADJ >= alpha)],"33")
     colX[which(PADJ < alpha)] <- paste0(colX[which(PADJ < alpha)],"cc")
@@ -332,7 +332,7 @@ volcano.plot <- function(DESeq.res,colset,p.adj=TRUE,alpha=0.05){
       plot(FC2,-log10(PADJ),
           type="n",xlab=expression(Log[2]~"fold change"),ylab=expression(-Log[10]~"P-values"))
       grid()
-      abline(v=c(2,-2),h=-log10(alpha))
+      abline(v=c(1,-1),h=-log10(alpha),...)
       colX <- colset[as.numeric(FC2>0)+1]
       colX[which(PADJ >= alpha)] <- paste0(colX[which(PADJ >= alpha)],"33")
       colX[which(PADJ < alpha)] <- paste0(colX[which(PADJ < alpha)],"cc")
