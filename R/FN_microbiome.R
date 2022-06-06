@@ -1031,4 +1031,23 @@ MDI <- function(otu,groups){
   return(MDI)
 }
 
-
+#single microbe logistic regression, output odds ratio and 95% CI
+smilr <- function(otu,groups,control=NULL,case=NULL){
+  logit.p <- list()
+  for(i in 1:nrow(otu)){
+    if(is.null(control) & is.null(case)){
+      log_data <- data.frame(species=t(log1p(otu))[,i],
+                             gx=as.numeric(factor(groups))-1)
+    } else if(!is.null(control) & !is.null(case)){
+      log_data <- data.frame(species=t(log1p(otu))[,i],
+                             gx=as.numeric(factor(groups,levels = c(control,case)))-1)
+    }
+    logit <- glm(gx~species,data=log_data,family = "binomial")
+    coef <- summary(logit)$coefficients[2,c(1,4)]
+    OR <- exp(cbind(OR=coef(logit),confint(logit)))[2,]
+    logit.p[[i]] <- c(coef,OR)
+  }
+  logit.p <- as.data.frame(do.call(rbind,logit.p))
+  rownames(logit.p) <- rownames(DESeq_output)
+  return(logit.p)
+}
