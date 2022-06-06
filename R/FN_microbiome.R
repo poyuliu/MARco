@@ -1012,3 +1012,23 @@ adonisx <- function (formula, data = NULL, permutations = 999, method = "bray",
   class(out) <- "adonis"
   out
 }
+
+#MDI: microbial dysbiosis index
+MDI <- function(otu,groups){
+  message("The healthy control group must be 1 and the disease group must be 2 in grouping factor")
+  prop.otu <- as.data.frame(prop.table(t(otu),2))
+  group.mean <- aggregate(prop.otu,list(groups),mean)
+  rownames(group.mean) <- group.mean$Group.1
+  group.mean <- group.mean[,-1]
+  
+  idx.ics <- which(group.mean[1,] < group.mean[2,])
+  idx.dcs <- which(group.mean[1,] > group.mean[2,])
+  
+  MDI <- c()
+  for(i in 1:nrow(prop.otu)){
+    MDI[i] <- log(sum(prop.otu[i,idx.ics])/sum(prop.otu[i,idx.dcs]))
+  }
+  return(MDI)
+}
+
+
