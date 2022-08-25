@@ -629,7 +629,7 @@ TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,groups=NULL,sample.order=NULL,b
   levelsum <- tx.level(data = otu,level)
   
   #par(mar=c(5.1,4.1,4.1,15.1))
-  if(!is.null(group)){
+  if(!is.null(groups)){
     levelsum <- as.matrix(aggregate2df(t(levelsum),groups,mean))
     colx <- rowMeans(phyla)
     colx[which(rowMeans(phyla) > pctcutoff)] <- colsets[seq_len(sum(rowMeans(phyla) > pctcutoff))]
@@ -660,7 +660,7 @@ TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,groups=NULL,sample.order=NULL,b
     if(level<=2){
       t1 <- barplot(levelsum[nrow(levelsum):1,],col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
     } else if(level>2) t1 <- barplot(levelsum[nrow(levelsum):1,],col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
-  } else if(is.null(group)){
+  } else if(is.null(groups)){
     colx <- rowMeans(phyla)
     colx[which(rowMeans(phyla) > pctcutoff)] <- colsets[seq_len(sum(rowMeans(phyla) > pctcutoff))]
     colx[which(rowMeans(phyla) < pctcutoff)] <- "#F0F0F0"
