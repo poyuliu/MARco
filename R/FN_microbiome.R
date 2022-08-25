@@ -658,8 +658,8 @@ TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,groups=NULL,sample.order=NULL,b
       
     }
     if(level<=2){
-      t1 <- barplot(levelsum[nrow(levelsum):1,],col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
-    } else if(level>2) t1 <- barplot(levelsum[nrow(levelsum):1,],col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+      t1 <- barplot(levelsum,col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+    } else if(level>2) t1 <- barplot(levelsum,col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
   } else if(is.null(groups)){
     colx <- rowMeans(phyla)
     colx[which(rowMeans(phyla) > pctcutoff)] <- colsets[seq_len(sum(rowMeans(phyla) > pctcutoff))]
@@ -689,16 +689,16 @@ TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,groups=NULL,sample.order=NULL,b
     }
     if(!is.null(sample.order)){
       if(level<=2){
-        t1 <- barplot(levelsum[nrow(levelsum):1,sample.order],col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
-      } else if(level>2) t1 <- barplot(levelsum[nrow(levelsum):1,sample.order],col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+        t1 <- barplot(levelsum[,sample.order],col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+      } else if(level>2) t1 <- barplot(levelsum[,sample.order],col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
     } else if(is.null(sample.order) & level<=2){
-      t1 <- barplot(levelsum[nrow(levelsum):1,],col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
-    } else if(is.null(sample.order) & level>2) t1 <- barplot(levelsum[nrow(levelsum):1,],col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+      t1 <- barplot(levelsum,col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+    } else if(is.null(sample.order) & level>2) t1 <- barplot(levelsum,col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
   }
   
   legend.names <- c(rownames(levelsum)[which(rowMeans(levelsum) > pctcutoff)],"others")
   if(level<=2){
-    legend.cols <- c(rev(colx[which(rowMeans(levelsum) > pctcutoff)]),"#F0F0F0")
+    legend.cols <- c(colx[which(rowMeans(levelsum) > pctcutoff)],"#F0F0F0")
   } else if(level>2) legend.cols <- c(lowlv[match(rownames(levelsum), lowlv$taxa),2][which(rowMeans(levelsum) > pctcutoff)],"#F0F0F0")
   if(legend==TRUE) legend("topright",legend = legend.names,fill = legend.cols,bty="n",cex=0.8,inset = c(inset,0),xpd=T)
   
