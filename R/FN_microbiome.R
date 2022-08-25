@@ -698,7 +698,7 @@ TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,groups=NULL,sample.order=NULL,b
   
   legend.names <- c(rownames(levelsum)[which(rowMeans(levelsum) > pctcutoff)],"others")
   if(level<=2){
-    legend.cols <- c(rev(colx[which(rowMeans(levelsum) > pctcutoff)]),"#F0F0F0")
+    legend.cols <- c(rev(colx[which(rowMeans(levelsum) > pctcutoff)]), "#F0F0F0")
   } else if(level>2) legend.cols <- c(lowlv[match(rownames(levelsum), lowlv$taxa),2][which(rowMeans(levelsum) > pctcutoff)],"#F0F0F0")
   if(legend==TRUE) legend("topright",legend = legend.names,fill = legend.cols,bty="n",cex=0.8,inset = c(inset,0),xpd=T)
   
