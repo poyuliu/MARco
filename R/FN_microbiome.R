@@ -602,7 +602,7 @@ PCENVcorOTU <- function(data,Ord,ENV,cor.method="pearson",alpha.pc.env=0.05,corr
 
 
 # Barplot for Phylum to family levels
-TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,grouped=FALSE,groups,sample.order=NULL,colsets,pctcutoff=1,legend=FALSE,inset=-0.05){
+TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,groups=NULL,sample.order=NULL,border = "#E0E0E044",colsets,pctcutoff=1,legend=FALSE,inset=-0.05){
   taxafromQ2tsv <- taxafromQ2tsv[match(rownames(otu),taxafromQ2tsv[,1]),]
   taxa <- strsplit(as.character(taxafromQ2tsv[,2]), "; ")
   taxx <- data.frame(Level_1=NA,Level_2=NA,Level_3=NA,Level_4=NA,Level_5=NA,Level_6=NA,Level_7=NA)
@@ -629,7 +629,7 @@ TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,grouped=FALSE,groups,sample.ord
   levelsum <- tx.level(data = otu,level)
   
   #par(mar=c(5.1,4.1,4.1,15.1))
-  if(grouped==TRUE){
+  if(!is.null(group)){
     levelsum <- as.matrix(aggregate2df(t(levelsum),groups,mean))
     colx <- rowMeans(phyla)
     colx[which(rowMeans(phyla) > pctcutoff)] <- colsets[seq_len(sum(rowMeans(phyla) > pctcutoff))]
@@ -658,9 +658,9 @@ TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,grouped=FALSE,groups,sample.ord
       
     }
     if(level<=2){
-      t1 <- barplot(levelsum,col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = "#E0E0E044",lwd=0.15,yaxt="n");axis(2,las=2)
-    } else if(level>2) t1 <- barplot(levelsum,col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = "#E0E0E044",lwd=0.15,yaxt="n");axis(2,las=2)
-  } else if(grouped==FALSE){
+      t1 <- barplot(levelsum[nrow(levelsum):1,],col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+    } else if(level>2) t1 <- barplot(levelsum[nrow(levelsum):1,],col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+  } else if(is.null(group)){
     colx <- rowMeans(phyla)
     colx[which(rowMeans(phyla) > pctcutoff)] <- colsets[seq_len(sum(rowMeans(phyla) > pctcutoff))]
     colx[which(rowMeans(phyla) < pctcutoff)] <- "#F0F0F0"
@@ -689,18 +689,18 @@ TaxaLvABar <- function(otu,taxafromQ2tsv,level=2,grouped=FALSE,groups,sample.ord
     }
     if(!is.null(sample.order)){
       if(level<=2){
-        t1 <- barplot(levelsum[,sample.order],col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = "#E0E0E044",lwd=0.15,yaxt="n");axis(2,las=2)
-      } else if(level>2) t1 <- barplot(levelsum[,sample.order],col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = "#E0E0E044",lwd=0.15,yaxt="n");axis(2,las=2)
+        t1 <- barplot(levelsum[nrow(levelsum):1,sample.order],col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+      } else if(level>2) t1 <- barplot(levelsum[nrow(levelsum):1,sample.order],col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
     } else if(is.null(sample.order) & level<=2){
-      t1 <- barplot(levelsum,col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = "#E0E0E044",lwd=0.15,yaxt="n");axis(2,las=2)
-    } else if(is.null(sample.order) & level>2) t1 <- barplot(levelsum,col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = "#E0E0E044",lwd=0.15,yaxt="n");axis(2,las=2)
+      t1 <- barplot(levelsum[nrow(levelsum):1,],col=colx,las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
+    } else if(is.null(sample.order) & level>2) t1 <- barplot(levelsum[nrow(levelsum):1,],col=lowlv[match(rownames(levelsum), lowlv$taxa),2],las=2,ylab="Relative abundance (%)",cex.names = 0.7,border = border,lwd=0.15,yaxt="n");axis(2,las=2)
   }
   
   legend.names <- c(rownames(levelsum)[which(rowMeans(levelsum) > pctcutoff)],"others")
   if(level<=2){
     legend.cols <- c(colx[which(rowMeans(levelsum) > pctcutoff)],"#F0F0F0")
   } else if(level>2) legend.cols <- c(lowlv[match(rownames(levelsum), lowlv$taxa),2][which(rowMeans(levelsum) > pctcutoff)],"#F0F0F0")
-  if(legend==TRUE) legend("topright",legend = legend.names,fill = legend.cols,bty="n",cex=0.8,inset = c(inset,0),xpd=T)
+  if(legend==TRUE) legend("topright",legend = legend.names,fill = rev(legend.cols),bty="n",cex=0.8,inset = c(inset,0),xpd=T)
   
 }
 
